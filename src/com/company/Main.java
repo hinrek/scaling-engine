@@ -14,7 +14,10 @@ public class Main {
 
 	    try(Stream<String> stream = Files.lines(Paths.get(fileName))) {
 
-            stream.forEach(System.out::println);
+            stream
+                    .map(s -> Integer.parseInt(s.substring(s.lastIndexOf(" ") + 1)))
+                    .sorted()
+                    .forEach(System.out::println);
 
         } catch (IOException e){
 	        e.printStackTrace();
