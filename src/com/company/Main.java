@@ -1,12 +1,12 @@
 package com.company;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.nio.file.Files;
 
 public class Main {
 
@@ -15,34 +15,40 @@ public class Main {
         long startTime = System.nanoTime();
         String fileName = "timing.log";
 
-        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
+        Pattern pattern = Pattern.compile(" ");
+        try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
+            List<Log> logs = in
+                    .lines()
+                    .map(line -> {
+                        String[] arr = pattern.split(line);
+                        return new Log(Integer.parseInt(arr[arr.length - 1]),
+                                arr[4]);
+                    })
+                    .collect(Collectors.toList());
 
-            Map<String, Integer> map = stream
-                    .collect(Collectors.toMap(element -> element, s -> Integer.parseInt(s.substring(s.lastIndexOf(" ") + 1))));
+            System.out.println("Group by log request resource");
+            Map<String, List<Log>> logsByRequestResource = logs
+                    .stream()
+                    .collect(Collectors.groupingBy(Log::getRequestedResource));
 
-            Map<String, Integer> result = map
+
+            System.out.println("Group by log request resource and average request duration");
+            Map<String, Double> logsByRequestResourceAndAverageDuration = logs
+                    .stream()
+                    .collect(Collectors.groupingBy(Log::getRequestedResource,
+                            Collectors.averagingInt(Log::getRequestDuration)));
+
+            logsByRequestResourceAndAverageDuration
                     .entrySet()
                     .stream()
                     .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                     .limit(100)
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-
-            result
-                    .entrySet()
                     .forEach(System.out::println);
-
-
-            /*
-            stream
-                    .map(s -> Integer.parseInt(s.substring(s.lastIndexOf(" ") + 1)))
-                    .sorted()
-                    .limit(1000)
-                    .forEach(System.out::println);
-                    */
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         long endTime = System.nanoTime();
         long seconds = TimeUnit.NANOSECONDS.toMillis(endTime - startTime);
