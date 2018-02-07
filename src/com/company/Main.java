@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) {
-
         long startTime = System.nanoTime();
         String fileName = "timing.log";
 
@@ -26,29 +25,21 @@ public class Main {
                     })
                     .collect(Collectors.toList());
 
-            System.out.println("Group by log request resource");
-            Map<String, List<Log>> logsByRequestResource = logs
-                    .stream()
-                    .collect(Collectors.groupingBy(Log::getRequestedResource));
-
-
-            System.out.println("Group by log request resource and average request duration");
             Map<String, Double> logsByRequestResourceAndAverageDuration = logs
                     .stream()
-                    .collect(Collectors.groupingBy(Log::getRequestedResource,
+                    .collect(Collectors.groupingBy(Log::getRequestResourceName,
                             Collectors.averagingInt(Log::getRequestDuration)));
 
             logsByRequestResourceAndAverageDuration
                     .entrySet()
                     .stream()
                     .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                    .limit(100)
-                    .forEach(System.out::println);
+                    .limit(1000)
+                    .forEach(entry -> System.out.printf("ms: %8.1f | Resource name: %s%n", entry.getValue(), entry.getKey()));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         long endTime = System.nanoTime();
         long seconds = TimeUnit.NANOSECONDS.toMillis(endTime - startTime);

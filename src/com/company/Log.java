@@ -1,34 +1,34 @@
 package com.company;
 
 public class Log {
-    private String date;
-    private String timestamp;
-    private String threadId;
-    private String optionalContext;
-    private String uriAndQueryString;
-    private String requestedResource;
-    private int dataPayloadElements;
+    private String requestResourceName;
     private int requestDuration;
 
     public Log() {
     }
 
 
-    public Log(int requestDuration, String requestedResource) {
+    public Log(int requestDuration, String requestResourceName) {
         this.requestDuration = requestDuration;
-        this.requestedResource = requestedResource;
+        this.requestResourceName = requestResourceName;
     }
 
-    @Override
-    public String toString() {
-        return requestDuration + " " + requestedResource;
+    private String replaceCharactersInRequestResourceName(String requestResourceName) {
+        // https://regexr.com/3ke4j
+        String pattern = "(=\\d+)|(=CUS\\w+)";
+        return requestResourceName.replaceAll(pattern, "");
     }
 
-    public String getRequestedResource() {
-        return requestedResource;
+    public String getRequestResourceName() {
+        return replaceCharactersInRequestResourceName(requestResourceName);
     }
 
     public int getRequestDuration() {
         return requestDuration;
+    }
+
+    @Override
+    public String toString() {
+        return requestDuration + " " + requestResourceName;
     }
 }
