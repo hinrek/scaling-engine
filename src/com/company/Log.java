@@ -7,20 +7,19 @@ public class Log {
     public Log() {
     }
 
-
     public Log(int requestDuration, String requestResourceName) {
         this.requestDuration = requestDuration;
         this.requestResourceName = requestResourceName;
     }
 
-    private String replaceCharactersInRequestResourceName(String requestResourceName) {
-        // https://regexr.com/3ke4j
-        String pattern = "(=\\d+)|(=CUS\\w+)";
-        return requestResourceName.replaceAll(pattern, "");
+    public String getRequestResourceName() {
+        return replaceCharactersInString(requestResourceName);
     }
 
-    public String getRequestResourceName() {
-        return replaceCharactersInRequestResourceName(requestResourceName);
+    private String replaceCharactersInString(String string) {
+        // https://regexr.com/3ke4j
+        String pattern = "(=\\d+)|(=CUS\\w+)";
+        return string.replaceAll(pattern, "");
     }
 
     public int getRequestDuration() {
