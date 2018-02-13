@@ -18,7 +18,7 @@ public class LogReader {
                     .stream()
                     .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                     .limit(logLimit)
-                    .forEach(entry -> System.out.printf("ms: %8.1f | Resource name: %s%n", entry.getValue(), entry.getKey()));
+                    .forEach(entry -> System.out.printf("%8.1fms | Resource name: %s%n", entry.getValue(), entry.getKey()));
         }
     }
 
