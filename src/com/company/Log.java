@@ -25,7 +25,7 @@ public class Log {
     }
 
     public int getRequestHour() {
-        return  Integer.parseInt(requestTime.substring(3,5));
+        return Integer.parseInt(requestTime.substring(3, 5));
     }
 
     public int getRequestDuration() {
@@ -34,7 +34,7 @@ public class Log {
 
     @Override
     public String toString() {
-        return requestTime + " "  + requestDuration + " " + requestResourceName;
+        return requestTime + " " + requestDuration + " " + requestResourceName;
     }
 
 }

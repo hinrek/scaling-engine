@@ -22,15 +22,16 @@ public class LogReader {
         }
     }
 
-    public static Map<Integer, Long> countRequestsBerHour(String fileName){
+    public static Map<Integer, Long> countRequestsBerHour(String fileName) {
         List<Log> logs = readFile(fileName);
         Map<Integer, Long> logsGrouped = null;
-        if (logs !=null){
+        if (logs != null) {
             logsGrouped = logs
                     .stream()
-                    .collect(Collectors.groupingBy(Log::getRequestHour, Collectors.counting()));
+                    .collect(Collectors.groupingBy(Log::getRequestHour,
+                            Collectors.counting()));
         }
-        return  logsGrouped;
+        return logsGrouped;
     }
 
     public static Map<String, Double> groupLogsByName(String fileName) {
