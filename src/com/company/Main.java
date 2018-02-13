@@ -1,5 +1,6 @@
 package com.company;
 
+import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -21,8 +22,8 @@ public class Main {
                 Map<String, Double> groupedLogs = LogReader.groupLogsByName(fileName);
                 LogReader.printSortedLogs(groupedLogs, logLimit);
 
-                Map<Integer, Long> countedLogs = LogReader.countRequestsBerHour(fileName);
-                countedLogs.entrySet().forEach(System.out::println);
+                Map<LocalTime, Long> countedLogs = LogReader.countRequestsPerHour(fileName);
+                LogReader.printHourlyHistogram(countedLogs);
 
             } catch (NumberFormatException e) {
                 System.err.println("Argument " + args[1] + " must be an integer.");

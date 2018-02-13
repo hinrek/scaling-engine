@@ -1,5 +1,8 @@
 package com.company;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class Log {
     private String requestResourceName;
     private int requestDuration;
@@ -24,8 +27,9 @@ public class Log {
         return initialString.replaceAll(pattern, "");
     }
 
-    public int getRequestHour() {
-        return Integer.parseInt(requestTime.substring(3, 5));
+    public LocalTime getRequestHour() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH");
+        return LocalTime.parse(requestTime.substring(3, 5), formatter);
     }
 
     public int getRequestDuration() {
